@@ -4,7 +4,7 @@ local speed = 1
 
 function checker()
     if Held == true then
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,-urspeed)
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,-speed)
     end
 end
 
@@ -31,3 +31,5 @@ game:GetService("UserInputService").InputEnded:connect(function(inputObject,game
         connection:Disconnect()
     end
 end)
+
+warn("Executed")
