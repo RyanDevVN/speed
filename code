@@ -1,6 +1,7 @@
 local Held = false
 local gcheck = true
 local speed = 1 
+local debounce = false
 
 function checker()
     if Held == true then
@@ -19,7 +20,8 @@ end)
 game:GetService("UserInputService").InputBegan:connect(function(inputObject, gameProcessedEvent)
     if inputObject.KeyCode == Enum.KeyCode.LeftControl and not gameProcessedEvent and gcheck then
         Held = true
-        connection = connection:Connect(checker)
+        connection = debounce == false and connection:Connect(checker)
+        debounce = true 
     elseif inputObject.KeyCode == Enum.KeyCode.K and not gameProcessedEvent then        
         gcheck = not gcheck
     end
@@ -28,7 +30,8 @@ end)
 game:GetService("UserInputService").InputEnded:connect(function(inputObject,gameProcessed)
     if inputObject.KeyCode == Enum.KeyCode.LeftControl and not gameProcessed then
         Held = false
-        connection:Disconnect()
+        if debounce then connection:Disconnect() end
+        debounce = false
     end
 end)
 
