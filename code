@@ -5,36 +5,34 @@ local player = game.Players.LocalPlayer
 
 function checker()
     if Held == true and player.Character.Humanoid.MoveDirection ~= Vector3.new(0,0,0) then
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,-speed)
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,-speed * 2)
     end
 end
 
-local stepped = game:GetService('RunService').Stepped
-local matched;
-
-local connection = stepped
-game.Players.LocalPlayer.Chatted:Connect(function(msg)
-    if string.match(string.lower(msg), "^s [%d]+$") then
-       matched = string.match(msg, "[%d]+")
-       speed = type(matched) == "number" and matched or speed
-    end
-end)
+local HB = game:GetService('RunService').HeartBeat
+local connection = HB
 
 game:GetService("UserInputService").InputBegan:connect(function(inputObject, gameProcessedEvent)
-    if inputObject.KeyCode == Enum.KeyCode.LeftControl and not gameProcessedEvent and gcheck then
+    if inputObject.KeyCode ~= Enum.KeyCode.LeftControl and gameProcessedEvent and not gcheck then return end
         Held = true
         connection = connection:Connect(checker)
-    elseif inputObject.KeyCode == Enum.KeyCode.K and not gameProcessedEvent then        
-        gcheck = not gcheck
-    end
 end)
 
-game:GetService("UserInputService").InputEnded:connect(function(inputObject,gameProcessed)
-    if inputObject.KeyCode == Enum.KeyCode.LeftControl and not gameProcessed then
+local game:GetService("UserInputService").InputEnded:connect(function(inputObject,gameProcessed)
+    if inputObject.KeyCode ~= Enum.KeyCode.LeftControl and gameProcessed then return end
         Held = false
-        connection:Disconnect()
-        connection = stepped
+        pcall(function()
+            connection:Disconnect()
+        end)
+        connection = HB
+end)
+
+game.Players.LocalPlayer.Chatted:Connect(function(msg)
+    if string.match(string.lower(msg), "^s [%-%+]?(%d+)$") then
+       speed = string.match(msg, "([%-%+]?(%d+))") or speed
+    elseif string.match(string.lower(msg), "DCWS") then
+        gcheck = false
     end
 end)
 
-warn("Executed")
+
