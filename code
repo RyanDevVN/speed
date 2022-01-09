@@ -9,8 +9,9 @@ function checker()
     end
 end
 
-local connection = game:GetService('RunService').Stepped
+local stepped = game:GetService('RunService').Stepped
 
+local connection = stepped
 game.Players.LocalPlayer.Chatted:Connect(function(msg)
     if string.match(string.lower(msg), "^s [%d]*$") then
        speed = string.match(msg, "[%d]+")
@@ -30,7 +31,10 @@ end)
 game:GetService("UserInputService").InputEnded:connect(function(inputObject,gameProcessed)
     if inputObject.KeyCode == Enum.KeyCode.LeftControl and not gameProcessed then
         Held = false
-        if debounce then connection = connection:Disconnect() end
+        if debounce then 
+            connection:Disconnect()
+            connection = stepped
+        end
         debounce = false
     end
 end)
