@@ -30,7 +30,7 @@ end)
 game:GetService("UserInputService").InputEnded:connect(function(inputObject,gameProcessed)
     if inputObject.KeyCode == Enum.KeyCode.LeftControl and not gameProcessed then
         Held = false
-        if debounce then connection:Disconnect() end
+        if debounce then connection = connection:Disconnect() end
         debounce = false
     end
 end)
