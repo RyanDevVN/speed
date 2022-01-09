@@ -1,7 +1,7 @@
 local Held = false
 local gcheck = true
 local speed = 1 
-local debounce = false
+local player = game.Players.LocalPlayer
 
 function checker()
     if Held == true and player.Character.Humanoid.MoveDirection ~= Vector3.new(0,0,0) then
@@ -23,8 +23,7 @@ end)
 game:GetService("UserInputService").InputBegan:connect(function(inputObject, gameProcessedEvent)
     if inputObject.KeyCode == Enum.KeyCode.LeftControl and not gameProcessedEvent and gcheck then
         Held = true
-        connection = debounce == false and connection:Connect(checker)
-        debounce = true 
+        connection = connection:Connect(checker)
     elseif inputObject.KeyCode == Enum.KeyCode.K and not gameProcessedEvent then        
         gcheck = not gcheck
     end
@@ -33,11 +32,8 @@ end)
 game:GetService("UserInputService").InputEnded:connect(function(inputObject,gameProcessed)
     if inputObject.KeyCode == Enum.KeyCode.LeftControl and not gameProcessed then
         Held = false
-        if debounce then 
-            connection:Disconnect()
-            connection = stepped
-        end
-        debounce = false
+        connection:Disconnect()
+        connection = stepped
     end
 end)
 
