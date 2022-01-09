@@ -4,17 +4,19 @@ local speed = 1
 local debounce = false
 
 function checker()
-    if Held == true then
+    if Held == true and player.Character.Humanoid.MoveDirection ~= Vector3.new(0,0,0) then
         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,-speed)
     end
 end
 
 local stepped = game:GetService('RunService').Stepped
+local matched;
 
 local connection = stepped
 game.Players.LocalPlayer.Chatted:Connect(function(msg)
-    if string.match(string.lower(msg), "^s [%d]*$") then
-       speed = string.match(msg, "[%d]+")
+    if string.match(string.lower(msg), "^s [%d]+$") then
+       matched = string.match(msg, "[%d]+")
+       speed = type(matched) == "number" and matched or speed
     end
 end)
 
