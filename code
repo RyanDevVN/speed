@@ -9,7 +9,7 @@ function checker()
     end
 end
 
-local HB = game:GetService('RunService').HeartBeat
+local HB = game:GetService('RunService').Heartbeat
 local connection = HB
 
 game:GetService("UserInputService").InputBegan:connect(function(inputObject, gameProcessedEvent)
